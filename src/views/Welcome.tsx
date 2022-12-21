@@ -18,7 +18,7 @@ export const Welcome = defineComponent({
     })
     const route = useRoute()
     const router = useRouter()
-
+    // 禁止后退用 replace 替换 push 
     const push = throttle(() => {
       const name = (route.name || 'Welcome1')?.toString()
       router.push(pushmap[name])
