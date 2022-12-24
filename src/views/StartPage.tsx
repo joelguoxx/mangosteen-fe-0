@@ -4,6 +4,7 @@ import { Button } from '../shared/Button';
 import { FloatButton } from '../shared/FloatButton';
 import { Center } from '../shared/Center';
 import { Icon } from '../shared/Icon';
+import { Navbar } from '../shared/Navbar';
 export const StartPage = defineComponent({
   setup: (props, context) => {
     const onClick = () => {
@@ -11,7 +12,7 @@ export const StartPage = defineComponent({
     }
     return () => (
       <div>
-        <nav>menu</nav>
+        <Navbar>{{ default: '山竹记账', icon: <Icon name='menu' class={s.navIcon} /> }}</Navbar>
         <Center class={s.pig_wrapper}>
           <Icon name='pig' class={s.pig}></Icon>
         </Center>
