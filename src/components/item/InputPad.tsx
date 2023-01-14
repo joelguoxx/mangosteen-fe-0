@@ -15,7 +15,30 @@ export const InputPad = defineComponent({
     const refDate = ref<Date>(now)
     const minDate = ref(new Date(2021, 0, 1))
     const maxDate = ref(new Date(2025, 5, 1))
-    const appendText = (n: number | string) => refAmount.value += n.toString()
+    const appendText = (n: number | string) => {
+      const nString = n.toString()
+      const dotIndex = refAmount.value.indexOf('.')
+      if (nString === '.') {
+        if (dotIndex >= 0) {
+          return
+        } else if (refAmount.value === '') {
+          refAmount.value = '0'
+        }
+      }
+      if (refAmount.value === '0') {
+        if (nString != '.') {
+          return
+        }
+      }
+      if (dotIndex >= 0 && refAmount.value.length - dotIndex > 2) {
+        return
+      }
+      if (refAmount.value.length >= 13) {
+        return
+      }
+      refAmount.value += n.toString()
+    }
+
     const buttons = [
       {
         text: '1', onClick: () => { appendText(1) }
@@ -31,6 +54,7 @@ export const InputPad = defineComponent({
       { text: '.', onClick: () => { appendText('.') } },
       { text: '0', onClick: () => { appendText(0) } },
       { text: '删除', onClick: () => { refAmount.value = refAmount.value.substring(0, refAmount.value.length - 1) } },
+      { text: '清空', onClick: () => { refAmount.value = '' } },
       { text: '提交', onClick: () => { } },
     ]
     const refDatePickerVisble = ref(false)

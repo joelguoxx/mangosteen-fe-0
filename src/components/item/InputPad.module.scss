@@ -25,7 +25,7 @@
   display: grid;
   padding: 6px;
   grid-template-areas:
-    "n1 n2 n3 dd"
+    "n1 n2 n3 d"
     "n4 n5 n6 dd"
     "n7 n8 n9 s"
     "n0 n0 nd s";
@@ -74,9 +74,12 @@
       grid-area: n0;
     }
     &:nth-child(12) {
-      grid-area: dd;
+      grid-area: d;
     }
     &:nth-child(13) {
+      grid-area: dd;
+    }
+    &:nth-child(14) {
       grid-area: s;
       background: var(--button-bg-important);
     }
