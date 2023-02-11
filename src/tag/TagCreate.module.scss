@@ -10,7 +10,7 @@
   padding: 16px;
 }
 .formRow {
-  margin-top: 8px;
+  margin-top: 2px;
 }
 .formLabel {
 }
@@ -45,4 +45,10 @@
     color: var(--error-color);
     font-size: 12px;
   }
+}
+
+.span {
+  display: block;
+  height: 16px;
+  width: 100%;
 }
