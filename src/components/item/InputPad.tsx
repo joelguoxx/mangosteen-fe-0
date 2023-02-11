@@ -2,8 +2,7 @@ import { defineComponent, PropType, ref } from 'vue';
 import { Icon } from '../../shared/Icon';
 import s from './InputPad.module.scss';
 import { time } from '../../shared/time'
-import { DatePicker, Popup } from 'vant';
-import 'vant/lib/index.css';
+import { DatetimePicker, NumberKeyboard, Popup } from 'vant';
 export const InputPad = defineComponent({
   props: {
     name: {
@@ -13,8 +12,8 @@ export const InputPad = defineComponent({
   setup: (props, context) => {
     const now = new Date()
     const refDate = ref<Date>(now)
-    const minDate = ref(new Date(2021, 0, 1))
-    const maxDate = ref(new Date(2025, 5, 1))
+    const minDate = ref(new Date(2020, 0, 1))
+    const maxDate = ref(new Date(2025, 11, 31))
     const appendText = (n: number | string) => {
       const nString = n.toString()
       const dotIndex = refAmount.value.indexOf('.')
@@ -67,14 +66,15 @@ export const InputPad = defineComponent({
         <span class={s.date}>
           <Icon name='date' class={s.icon} />
           <span>
-            <span onClick={showDatePicker} >{time(refDate.value).format()}</span>
-            <Popup position='bottom' v-model:show={refDatePickerVisble.value} >
-              <DatePicker
-                v-model={refDate.value}
-                title="选择日期"
-                min-date={minDate.value}
-                max-date={maxDate.value}
-                onConfirm={hideDatePicker}
+            <span onClick={showDatePicker}>{time(refDate.value).format()}</span>
+            <Popup position='bottom' v-model:show={refDatePickerVisble.value}>
+              <DatetimePicker
+                value={refDate.value}
+                type="date"
+                title="选择年月日"
+                minDate={minDate.value}
+                maxDate={maxDate.value}
+                onConfirm={setDate}
                 onCancel={hideDatePicker}
               />
             </Popup>
