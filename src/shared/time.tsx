@@ -29,7 +29,10 @@ export class Time {
     return new Time(new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0, 0, 0, 0))
   }
   lastDayOfYear() {
-    new Time(new Date(this.date.getFullYear() + 1, 0, 0, 0, 0, 0))
+    return new Time(new Date(this.date.getFullYear() + 1, 0, 0, 0, 0, 0))
+  }
+  getRaw() {
+    return this.date
   }
   add(amount: number, unit: 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'millisecond') {
     let date = new Date(this.date.getTime())
@@ -64,7 +67,10 @@ export class Time {
       case 'millisecond':
         date.setMonth(date.getMilliseconds() + amount);
         break;
+      default:
+        throw new Error('Time.add: unknown unit');
     }
+    return new Time(date)
   }
 }
 

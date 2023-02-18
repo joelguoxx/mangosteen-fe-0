@@ -52,3 +52,12 @@
   height: 16px;
   width: 100%;
 }
+.actions {
+  display: flex;
+  padding: 0 16px 16px 16px;
+  justify-content: space-between;
+}
+.removeTags,
+.removeTagsAndItems {
+  width: calc(50% - 8px);
+}
