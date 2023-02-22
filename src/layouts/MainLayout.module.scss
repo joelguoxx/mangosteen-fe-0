@@ -3,6 +3,6 @@
   .navbar {
     position: sticky;
     top: 0;
-    z-index: var(--z-index-navbar);
+    z-index: var(--van-overlay-z-index);
   }
 }
