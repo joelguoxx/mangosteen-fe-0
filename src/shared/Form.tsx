@@ -33,7 +33,8 @@ export const FormItem = defineComponent({
     },
     error: {
       type: String
-    }
+    },
+    placeholder: String
   },
   emits: ['update:modelValue'],
   setup: (props, context) => {
@@ -43,6 +44,7 @@ export const FormItem = defineComponent({
         case 'text':
           return <input
             value={props.modelValue}
+            placeholder={props.placeholder}
             onInput={(e: any) => context.emit('update:modelValue', e.target.value)}
             class={[s.formItem, s.input]} />
         case 'emojiSelect':
@@ -52,12 +54,15 @@ export const FormItem = defineComponent({
             class={[s.formItem, s.emojiList, s.error]} />
         case 'validationCode':
           return <>
-            <input class={[s.formItem, s.input, s.validationCodeInput]} />
+            <input class={[s.formItem, s.input, s.validationCodeInput]}
+              placeholder={props.placeholder}
+            />
             <Button class={[s.formItem, s.button, s.validationCodeButton]}>发送验证码</Button>
           </>
         case 'date':
           return <>
             <input readonly={true} value={props.modelValue}
+              placeholder={props.placeholder}
               onClick={() => { refDateVisible.value = true }}
               class={[s.formItem, s.input]} />
             <Popup position='bottom' v-model:show={refDateVisible.value}>
