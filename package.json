@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "echarts": "5.3.2",
     "sass": "1.56.2",
     "svgo": "3.0.2",
     "svgstore": "3.0.1",
@@ -19,8 +20,8 @@
     "@vitejs/plugin-vue": "4.0.0",
     "@vitejs/plugin-vue-jsx": "3.0.0",
     "typescript": "4.9.4",
-    "vite-plugin-style-import": "1.4.1",
     "vite": "4.0.0",
+    "vite-plugin-style-import": "1.4.1",
     "vue-tsc": "0.29.8"
   }
 }
