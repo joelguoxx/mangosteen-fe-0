@@ -9,6 +9,10 @@
   border-radius: var(--button-radius);
   &.important {
   }
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   &.normal {
   }
   &.danger {
