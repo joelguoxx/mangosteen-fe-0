@@ -61,7 +61,7 @@ export const TimeTabsLayout = defineComponent({
         title: () => '山竹记账',
         icon: () => <OverlayMenu />,
         default: () => <>
-          <Tabs classPrefix={'customTabs'} v-model:selected={refSelected.value}
+          <Tabs class={s.xxx} classPrefix={'customTabs'} v-model:selected={refSelected.value}
             onUpdate:selected={onSelect}>
             <Tab name='本月'>
               <props.component startDate={timeList[0].start.format()} endDate={timeList[0].end.format()} />
