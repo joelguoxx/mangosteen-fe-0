@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { mockSession } from "../mock";
 type JSONValue = string | number | null | boolean | JSONValue[] | { [key: string]: JSONValue };
 
 export class Http {
@@ -41,6 +42,17 @@ export class Http {
     })
   }
 }
+const mock = (response: AxiosResponse) => {
+  if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '192.168.3.57') { return false }
+  switch (response.config.params._mock) {
+    case 'session':
+      [response.status, response.data] = mockSession(response.config)
+      return true
+  }
+  return false
+}
+
+
 export const http = new Http('/api/v1')
 http.instance.interceptors.request.use(config => {
   const token = localStorage.getItem('jwt')
@@ -48,6 +60,16 @@ http.instance.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${token}`
   }
   return config
+})
+http.instance.interceptors.response.use(response => {
+  mock(response)
+  return response
+}, (error) => {
+  if (mock(error.response)) {
+    return error.response
+  } else {
+    throw error
+  }
 })
 
 http.instance.interceptors.response.use(response => {
