@@ -42,6 +42,13 @@ export class Http {
   }
 }
 export const http = new Http('/api/v1')
+http.instance.interceptors.request.use(config => {
+  const token = localStorage.getItem('jwt')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
 
 http.instance.interceptors.response.use(response => {
   return response

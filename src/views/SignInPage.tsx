@@ -8,6 +8,7 @@ import { validate, hasError } from '../shared/validate';
 import { http } from '../shared/Http';
 import { useBool } from '../hooks/useBool';
 import { useRoute, useRouter } from 'vue-router';
+import { refreshMe } from '../shared/me';
 
 export const SignInPage = defineComponent({
   props: {
@@ -42,6 +43,7 @@ export const SignInPage = defineComponent({
         // router.push('/sign_in?return_to=' + encodeURIComponent(route.fullPath))
         const returnTo = route.query.return_to?.toString()
         // const returnTo = localStorage.getItem('returnTo')
+        refreshMe()
         router.push(returnTo || '/')
 
       }
@@ -70,7 +72,6 @@ export const SignInPage = defineComponent({
               <Icon name='mangosteen' class={s.icon} />
               <h1 class={s.appName}>山竹记账</h1>
             </div>
-            <div>{JSON.stringify(formData)}</div>
             <Form onSubmit={onSubmit}>
               <FormItem label='邮箱地址' type='text' v-model={formData.email} error={errors.email?.[0] ?? '　'}
                 placeholder='请输入邮箱,然后点击发送验证码' />
