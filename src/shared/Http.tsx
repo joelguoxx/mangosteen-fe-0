@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { mockSession } from "../mock";
+import { mockSession } from "../mock/mock";
 type JSONValue = string | number | null | boolean | JSONValue[] | { [key: string]: JSONValue };
 
 export class Http {
