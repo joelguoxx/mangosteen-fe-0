@@ -8,3 +8,11 @@ declare module '*.vue' {
 }
 
 type Mock = (config: AxiosRequestConfig) => [number, any]
+
+type Tag = {
+  id: number,
+  user_id: number,
+  name: string,
+  sign: string,
+  kind: 'expenses' | 'income'
+}

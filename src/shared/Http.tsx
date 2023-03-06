@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { mockSession } from "../mock/mock";
+import { mockSession, mockTagsIndex } from "../mock/mock";
+
 type JSONValue = string | number | null | boolean | JSONValue[] | { [key: string]: JSONValue };
 
 export class Http {
@@ -44,9 +45,12 @@ export class Http {
 }
 const mock = (response: AxiosResponse) => {
   if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '192.168.3.57') { return false }
-  switch (response.config.params._mock) {
+  switch (response.config?.params?._mock) {
     case 'session':
       [response.status, response.data] = mockSession(response.config)
+      return true
+    case 'tagsIndex':
+      [response.status, response.data] = mockTagsIndex(response.config)
       return true
   }
   return false

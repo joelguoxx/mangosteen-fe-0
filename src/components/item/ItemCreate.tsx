@@ -4,6 +4,8 @@ import { Icon } from '../../shared/Icon';
 import { Tab, Tabs } from '../../shared/Tabs';
 import { InputPad } from './InputPad';
 import s from './ItemCreate.module.scss';
+import { onMounted } from 'vue';
+import { http } from '../../shared/Http';
 
 export const ItemCreate = defineComponent({
   props: {
@@ -13,48 +15,22 @@ export const ItemCreate = defineComponent({
   },
   setup: (props, context) => {
     const refKind = ref('支出')
-    const refExpensesTags = ref([
-      { id: 1, name: '餐费', sign: '¥', category: 'expenses' },
-      { id: 2, name: '游戏', sign: '¥', category: 'expenses' },
-      { id: 3, name: '旅游', sign: '¥', category: 'expenses' },
-      { id: 3, name: '旅游', sign: '¥', category: 'expenses' },
-      { id: 3, name: '旅游', sign: '¥', category: 'expenses' },
-      { id: 3, name: '旅游', sign: '¥', category: 'expenses' },
-      { id: 3, name: '旅游', sign: '¥', category: 'expenses' },
-
-
-    ])
-    const refIncomeTags = ref([
-      { id: 4, name: '工资', sign: '¥', category: 'income' },
-      { id: 5, name: '彩票', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-      { id: 6, name: '理财', sign: '¥', category: 'income' },
-
-
-    ])
+    onMounted(async () => {
+      const response = await http.get<{ resources: Tag[] }>('/tags', {
+        kind: 'expenses',
+        _mock: 'tagsIndex'
+      })
+      refExpensesTags.value = response.data.resources
+    })
+    const refExpensesTags = ref<Tag[]>([])
+    onMounted(async () => {
+      const response = await http.get<{ resources: Tag[] }>('/tags', {
+        kind: 'income',
+        _mock: 'tagsIndex'
+      })
+      refIncomeTags.value = response.data.resources
+    })
+    const refIncomeTags = ref<Tag[]>([])
     return () => (
       <MainLayout class={s.layout}>{
         {
