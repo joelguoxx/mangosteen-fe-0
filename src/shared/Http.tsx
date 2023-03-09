@@ -1,7 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { mockSession, mockTagsIndex } from "../mock/mock";
+import { mockSession, mockTagIndex } from "../mock/mock";
 
-type JSONValue = string | number | null | boolean | JSONValue[] | { [key: string]: JSONValue };
+type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
+type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>
+type PatchConfig = Omit<AxiosRequestConfig, 'url' | 'data'>
+type DeleteConfig = Omit<AxiosRequestConfig, 'params'>
 
 export class Http {
   instance: AxiosInstance
@@ -10,62 +13,48 @@ export class Http {
       baseURL
     })
   }
-  get<R = unknown>(url: string, query?: Record<string, string>, config?: Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>) {
-    return this.instance.request<R>({
-      ...config,
-      url,
-      params: query,
-      method: 'get'
-    })
+  get<R = unknown>(url: string, query?: Record<string, JSONValue>, config?: GetConfig) {
+    return this.instance.request<R>({ ...config, url: url, params: query, method: 'get' })
   }
-  post<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>) {
-    return this.instance.request<R>({
-      ...config,
-      url,
-      data,
-      method: 'post'
-    })
+  post<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: PostConfig) {
+    return this.instance.request<R>({ ...config, url, data, method: 'post' })
   }
-  patch<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>) {
-    return this.instance.request<R>({
-      ...config,
-      url,
-      data,
-      method: 'patch'
-    })
+  patch<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: PatchConfig) {
+    return this.instance.request<R>({ ...config, url, data, method: 'patch' })
   }
-  delete(url: string, query?: Record<string, JSONValue>, config?: Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>) {
-    return this.instance.request({
-      ...config,
-      url,
-      params: query,
-      method: 'delete'
-    })
+  delete<R = unknown>(url: string, query?: Record<string, string>, config?: DeleteConfig) {
+    return this.instance.request<R>({ ...config, url: url, params: query, method: 'delete' })
   }
 }
+
 const mock = (response: AxiosResponse) => {
-  if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '192.168.3.57') { return false }
+  if (location.hostname !== 'localhost'
+    && location.hostname !== '127.0.0.1'
+    && location.hostname !== '192.168.3.57') { return false }
   switch (response.config?.params?._mock) {
+    case 'tagIndex':
+      [response.status, response.data] = mockTagIndex(response.config)
+      console.log('response')
+      console.log(response)
+      return true
     case 'session':
       [response.status, response.data] = mockSession(response.config)
-      return true
-    case 'tagsIndex':
-      [response.status, response.data] = mockTagsIndex(response.config)
       return true
   }
   return false
 }
 
-
 export const http = new Http('/api/v1')
+
 http.instance.interceptors.request.use(config => {
-  const token = localStorage.getItem('jwt')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+  const jwt = localStorage.getItem('jwt')
+  if (jwt) {
+    config.headers!.Authorization = `Bearer ${jwt}`
   }
   return config
 })
-http.instance.interceptors.response.use(response => {
+
+http.instance.interceptors.response.use((response) => {
   mock(response)
   return response
 }, (error) => {
@@ -75,15 +64,14 @@ http.instance.interceptors.response.use(response => {
     throw error
   }
 })
-
-http.instance.interceptors.response.use(response => {
-  return response
-}, error => {
-  if (error.response) {
-    const axiosError = error as AxiosError
-    if (axiosError.response?.status === 429) {
-      alert('请求太频繁了')
+http.instance.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response) {
+      const axiosError = error as AxiosError
+      if (axiosError.response?.status === 429) {
+        alert('你太频繁了')
+      }
     }
-  }
-  throw error
-})
+    throw error
+  })

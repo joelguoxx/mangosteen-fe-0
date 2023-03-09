@@ -15,11 +15,10 @@ export const Tags = defineComponent({
     const { tags, hasMore, page, fetchTags } = useTags((page) => {
       return http.get<Resources<Tag>>('/tags', {
         kind: props.kind,
-        page: (page + 1).toString(),
+        page: page + 1,
         _mock: 'tagIndex'
       })
     })
-    console.log(page.value)
     return () => <>
       <div class={s.tags_wrapper}>
         <div class={s.tag}>
