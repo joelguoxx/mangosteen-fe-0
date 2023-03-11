@@ -10,6 +10,20 @@ export const mockSession: Mock = (config) => {
     jwt: faker.random.word()
   }]
 }
+export const mockItemCreate: Mock = (config) => {
+  return [200, {
+    resource: {
+      "id": 100,
+      "user_id": 666,
+      "amount": 888,
+      "tags_id": [777],
+      "happen_at": "2023-03-10T18:00:00.000Z",
+      "created_at": "2023-03-10T21:00:00.000Z",
+      "kind": "expenses"
+    }
+  }]
+}
+
 let id = 0
 const createId = () => {
   id += 1
