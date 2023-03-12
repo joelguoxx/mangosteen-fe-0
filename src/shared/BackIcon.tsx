@@ -10,7 +10,7 @@ export const BackIcon = defineComponent({
       if (return_to) {
         router.push(return_to.toString())
       } else {
-        router.back
+        router.back()
       }
     }
     return () => (
